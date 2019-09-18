@@ -13,6 +13,30 @@ import (
 
 type server struct{}
 
+func (s *server) GreetEveryone(stream greet.GreetService_GreetEveryoneServer) error {
+	result := ""
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			log.Fatal("error while handling request", err)
+			return err
+		}
+		firstName := req.GetGreeting().FirstName
+		result = result + "Hello " + firstName + "!" +"\n"
+		err = stream.Send(&greet.GreetEveryoneResponse{
+			Result:               result,
+		})
+		if err!= nil {
+			log.Fatal("error while sending request ",err)
+			return err
+		}
+	}
+	return nil
+}
+
 func (s *server) LongGreet(stream greet.GreetService_LongGreetServer) error {
 	result := ""
 	for {
