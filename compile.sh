@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-protoc greet/greet.proto --go_out=plugin=grpc:.
+protoc greet/greet.proto --go_out=plugins=grpc:.
